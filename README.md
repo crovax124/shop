@@ -1,6 +1,6 @@
 # shop
 
-A new Flutter project.
+Übungsapp für ein Shopprojekt
 
 ## Getting Started
 
