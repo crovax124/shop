@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import './product.dart';
 
-
 class Products with ChangeNotifier {
   List<Product> _items = [
     Product(
@@ -11,7 +10,7 @@ class Products with ChangeNotifier {
       description: 'Ein rotes Shirt - ziemlich Rot!',
       price: 29.99,
       imageUrl:
-      'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
+          'https://cdn.pixabay.com/photo/2016/10/02/22/17/red-t-shirt-1710578_1280.jpg',
     ),
     Product(
       id: 'p2',
@@ -19,7 +18,7 @@ class Products with ChangeNotifier {
       description: 'Eine wirklich schöne Hose',
       price: 59.99,
       imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Trousers%2C_dress_%28AM_1960.022-8%29.jpg/512px-Trousers%2C_dress_%28AM_1960.022-8%29.jpg',
     ),
     Product(
       id: 'p3',
@@ -27,7 +26,7 @@ class Products with ChangeNotifier {
       description: 'Warm und gemütlich - am besten für den Winter!.',
       price: 19.99,
       imageUrl:
-      'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
+          'https://live.staticflickr.com/4043/4438260868_cc79b3369d_z.jpg',
     ),
     Product(
       id: 'p4',
@@ -35,38 +34,62 @@ class Products with ChangeNotifier {
       description: 'z.B. für Bratwürstchen',
       price: 49.99,
       imageUrl:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
     ),
   ];
+
 // var _showFavoritesOnly = false;
 
-    List<Product> get items {
-      // if (_showFavoritesOnly) {
-      //   return _items.where((prodItem) => prodItem.isFavorite).toList();
-      // }
+  List<Product> get items {
+    // if (_showFavoritesOnly) {
+    //   return _items.where((prodItem) => prodItem.isFavorite).toList();
+    // }
     return [..._items];
-    }
+  }
 
-List<Product> get favoriteItems {
-      return _items.where((prodItem) => prodItem.isFavorite).toList();
-}
+  List<Product> get favoriteItems {
+    return _items.where((prodItem) => prodItem.isFavorite).toList();
+  }
 
+  Product findById(String id) {
+    return _items.firstWhere((prod) => prod.id == id);
+  }
 
-    Product findById(String id) {
-      return _items.firstWhere((prod) => prod.id == id);
-    }
-    // void showFavoritesOnly() {
+  // void showFavoritesOnly() {
 
-    //   _showFavoritesOnly = true;
-    //   notifyListeners();
-    // }
-    //
-    // void showAll() {
-    //   _showFavoritesOnly = false;
-    //   notifyListeners();
-    // }
+  //   _showFavoritesOnly = true;
+  //   notifyListeners();
+  // }
+  //
+  // void showAll() {
+  //   _showFavoritesOnly = false;
+  //   notifyListeners();
+  // }
 
-    void addProduct() {
+  void addProduct(Product product) {
+    final newProduct = Product(
+      title: product.title,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      description: product.description,
+      id: DateTime.now().toString(),
+    );
+    _items.add(newProduct);
+// _items.insert(0, newProduct); // at the start of the List
+    notifyListeners();
+  }
+
+  void updateProduct(String id, Product newProduct) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+    if (prodIndex >= 0) {
+      _items[prodIndex] = newProduct;
       notifyListeners();
+    } else {
+      print('haha');
     }
+  }
+  void deleteProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
+  }
 }
