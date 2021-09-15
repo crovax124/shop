@@ -77,17 +77,20 @@ class Products with ChangeNotifier {
       'imageUrl': product.imageUrl,
       'price': product.price,
       'isFavorite': product.isFavorite,
-    }),);
-    final newProduct = Product(
-      title: product.title,
-      imageUrl: product.imageUrl,
-      price: product.price,
-      description: product.description,
-      id: DateTime.now().toString(),
-    );
-    _items.add(newProduct);
+    }),).then((response) {
+      final newProduct = Product(
+        title: product.title,
+        imageUrl: product.imageUrl,
+        price: product.price,
+        description: product.description,
+        id: json.decode(response.body)['name'],
+      );
+      _items.add(newProduct);
 // _items.insert(0, newProduct); // at the start of the List
-    notifyListeners();
+      notifyListeners();
+    }
+    );
+
   }
 
   void updateProduct(String id, Product newProduct) {
