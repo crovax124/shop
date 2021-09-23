@@ -42,9 +42,9 @@ class Products with ChangeNotifier {
     // ),
   ];
 final String authToken;
+final String userId;
 
-
-  Products(this.authToken, this._items); // var _showFavoritesOnly = false;
+  Products(this.authToken, this._items, this.userId); // var _showFavoritesOnly = false;
 
   List<Product> get items {
     // if (_showFavoritesOnly) {
@@ -72,15 +72,20 @@ final String authToken;
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetProducts() async {
-    final url = Uri.parse(
-        'https://shopapp-2b6a2-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authToken');
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
+    final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    var url = Uri.parse(
+        'https://shopapp-2b6a2-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=$authToken&$filterString');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       if(extractedData == null) {
         return;
       }
+     url = Uri.parse(
+          'https://shopapp-2b6a2-default-rtdb.europe-west1.firebasedatabase.app/userfavorites/$userId.json?auth=$authToken');
+      final favoriteStatus = await http.get(url);
+      final favoriteData = jsonDecode(favoriteStatus.body);
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
@@ -88,7 +93,7 @@ final String authToken;
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'],
-          isFavorite: prodData['isFavorite'],
+          isFavorite: favoriteData == null ? false : favoriteData[prodId] ?? false,
           imageUrl: prodData['imageUrl'],
         ));
       });
@@ -110,7 +115,7 @@ final String authToken;
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite,
+          'creatorId': userId,
         }),
       );
       final newProduct = Product(
