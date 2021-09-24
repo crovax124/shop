@@ -12,6 +12,7 @@ import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './providers/auth.dart';
+import './screens/splash-screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           update: (context, auth, previousProducts) => Products(
             auth.token,
             previousProducts == null ? [] : previousProducts.items,
-            auth.userId
+            auth.userId,
           ),
         ),
         ChangeNotifierProvider(
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: Consumer<Auth>(
-        builder: (ctx, auth, child) => MaterialApp(
+        builder: (context, auth, child) => MaterialApp(
           title: 'MyShop',
           theme: ThemeData(
             primarySwatch: Colors.indigo,
@@ -55,7 +56,16 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
-          home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+          home: auth.isAuth
+              ? ProductsOverviewScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : AuthScreen(),
+                ),
           // initialRoute: '/',
           routes: {
             // '/': (ctx) => ProductsOverviewScreen(),

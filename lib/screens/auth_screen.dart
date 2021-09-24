@@ -108,7 +108,7 @@ class _AuthCardState extends State<AuthCard> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Ein fehler ist aufgetreten!'),
+        title: Text('Ein Fehler ist aufgetreten!'),
         content: Text(message),
         actions: [
           FlatButton(

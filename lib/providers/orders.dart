@@ -32,7 +32,7 @@ final String userId;
 
   Future<void> fetchAndSetOrders() async {
     final url = Uri.parse(
-        'https://shopapp-2b6a2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authToken');
+        'https//shopapp-2b6a2-default-rtdb.europe-west1.firebasedatabase.app/orders/$userId.json?auth=$authToken');
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
     final extractedData = json.decode(response.body) as Map<String, dynamic>;
