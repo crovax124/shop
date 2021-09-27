@@ -32,7 +32,9 @@ class ProductItem extends StatelessWidget {
             onPressed: () {
               cart.removeSingleItem(product.id);
             },
-            color: Theme.of(context).errorColor,
+            color: Theme
+                .of(context)
+                .errorColor,
           )
         ],
       ),
@@ -49,23 +51,31 @@ class ProductItem extends StatelessWidget {
               arguments: product.id,
             );
           },
-          child: Image.network(
-            product.imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
-        footer: GridTileBar(
+          child: Hero(
+            tag: product.id,
+            child: FadeInImage(
+              placeholder: AssetImage('assets/images/product-placeholder.png'),
+              image: NetworkImage(product.imageUrl),
+              fit: BoxFit.cover,),
+          ),),
+
+          footer: GridTileBar(
           backgroundColor: Colors.white30,
           leading: Consumer<Product>(
-            builder: (ctx, product, child) => IconButton(
-              color: Theme.of(context).accentColor,
-              icon: Icon(
-                product.isFavorite ? Icons.favorite : Icons.favorite_border,
-              ),
-              onPressed: () => {
-                product.toggleFavoriteStatus(authData.token, authData.userId),
-              },
-            ),
+            builder: (ctx, product, child) =>
+                IconButton(
+                  color: Theme
+                      .of(context)
+                      .accentColor,
+                  icon: Icon(
+                    product.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  ),
+                  onPressed: () =>
+                  {
+                    product.toggleFavoriteStatus(
+                        authData.token, authData.userId),
+                  },
+                ),
           ),
           title: Text(
             product.title,
@@ -78,7 +88,8 @@ class ProductItem extends StatelessWidget {
             icon: Icon(
               Icons.add_shopping_cart_rounded,
             ),
-            onPressed: () => {
+            onPressed: () =>
+            {
               cart.addItem(
                 product.id,
                 product.price,

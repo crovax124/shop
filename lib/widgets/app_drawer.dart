@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../screens/user_products_screen.dart';
 import '../screens/orders_screen.dart';
 import '../providers/auth.dart';
+import '../helpers/custom_route.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -25,23 +26,30 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.payment),
             title: Text('Deine Bestellungen'),
-            onTap: () => Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName),
+            onTap: () =>
+            //     Navigator.of(context).pushReplacement(
+            //   CustomRoute(
+            //     builder: (context) => OrdersScreen(),
+            //   ),
+            // ),
+            Navigator.of(context).pushReplacementNamed(OrdersScreen.routeName),
           ),
           Divider(),
           ListTile(
             leading: Icon(Icons.dashboard_customize),
             title: Text('Deine Produkte'),
-            onTap: () => Navigator.of(context).pushReplacementNamed(UserProductsScreen.routeName),
+            onTap: () => Navigator.of(context)
+                .pushReplacementNamed(UserProductsScreen.routeName),
           ),
           Divider(),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Logout'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamed('/');
-              Provider.of<Auth>(context, listen: false).logout();}
-          ),
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Logout'),
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed('/');
+                Provider.of<Auth>(context, listen: false).logout();
+              }),
         ],
       ),
     );
